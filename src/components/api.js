@@ -3,7 +3,8 @@ const MAPBOX_API_KEY = 'pk.eyJ1IjoieG9ya3kiLCJhIjoiY2xpeGszaWcwMDdncDNrdXU5enB0c
 
 export const getWeatherByCoords = async (lat, lon) => {
   try {
-    const url = `http://api.weatherstack.com/current?access_key=${WEATHERSTACK_API_KEY}&query=${lat},${lon}`;
+    const url = `https://api.weatherstack.com/current?access_key=${WEATHERSTACK_API_KEY}&query=${lat},${lon}`;
+    console.log(url);
     const response = await fetch(url);
     if (!response.ok) throw new Error('Weather fetch failed');
     const data = await response.json();
