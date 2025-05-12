@@ -104,10 +104,21 @@ form {
 }
 
 input[type="search"] {
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1.2rem;
+  border: 1px solid #213547;
   flex: 1;
+}
+
+input[type="search"]:focus {
+  outline: none;
+  border-color: #646cff;
+}
+
+.description {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
 }
 
 button {
@@ -125,4 +136,48 @@ button:hover {
 
 .error {
   color: red;
+}
+
+.search-container {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 4px;
+  padding: 0;
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.suggestion-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .suggestions {
+    background: #1a1a1a;
+    border-color: #333;
+  }
+
+  .suggestion-item:hover {
+    background-color: #333;
+  }
 }

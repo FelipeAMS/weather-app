@@ -4,11 +4,15 @@ const MAPBOX_API_KEY = 'pk.eyJ1IjoieG9ya3kiLCJhIjoiY2xpeGszaWcwMDdncDNrdXU5enB0c
 export const getWeatherByCoords = async (lat, lon) => {
   try {
     const url = `https://api.weatherstack.com/current?access_key=${WEATHERSTACK_API_KEY}&query=${lat},${lon}`;
-    console.log(url);
     const response = await fetch(url);
     if (!response.ok) throw new Error('Weather fetch failed');
     const data = await response.json();
+    if (data.error) {
+      throw new Error(data.error.info || 'Error fetching weather data');
+    }
+
     return {
+      name: data.location.name,
       country: data.location.country,
       temperature: `${Math.round(data.current.temperature)}°C`,
       description: data.current.weather_descriptions[0],
@@ -17,21 +21,24 @@ export const getWeatherByCoords = async (lat, lon) => {
       iconUrl: data.current.weather_icons[0],
     };
   } catch (err) {
+    console.error('Weather API Error:', err);
     throw new Error('Error fetching weather data');
   }
 };
 
 export const getCoordinates = async (city) => {
   try {
-    const url = `https://api.mapbox.com/search/geocode/v6/forward?q=${city}&access_token=${MAPBOX_API_KEY}`; 
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(city)}.json?access_token=${MAPBOX_API_KEY}&types=place&limit=5`;
     const response = await fetch(url);
     if (!response.ok) throw new Error('Location fetch failed');
-    const results = await response.json();
-    if (results.length === 0) throw new Error('City not found');
-    const lat = results.features[0].geometry.coordinates[1];
-    const lon = results.features[0].geometry.coordinates[0];
-    return { lat, lon };
+    const data = await response.json();
+    if (!data.features || data.features.length === 0) {
+      throw new Error('No locations found');
+    }
+
+    return data.features;
   } catch (err) {
+    console.error('Mapbox API Error:', err);
     throw new Error('Error fetching location data');
   }
 };
